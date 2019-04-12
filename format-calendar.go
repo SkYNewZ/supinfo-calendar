@@ -33,9 +33,8 @@ func createCalendar(old *string, path string) {
 
 		// fix timezone on date
 		if strings.Contains(line, "DTSTART") || strings.Contains(line, "DTEND") {
-			if !strings.Contains(line, "Z") {
-				array[i] = array[i] + "Z"
-			}
+			split := strings.Split(array[i], ":")
+			array[i] = split[0] + ";TZID=Europe/Paris:" + split[1]
 		}
 		
 		// fix name
@@ -45,11 +44,11 @@ func createCalendar(old *string, path string) {
 	}
 
 	// append element to copy
-	array = append(array, "0", "0", "0")
-	copy(array[9+3:], array[9:]) //delay for 2 index
-	array[9] = "X-WR-TIMEZONE:Europe/Paris"
-	array[10] = "X-PUBLISHED-TTL:PT12H"
-	array[11] = "TZID:Europe/Paris"
+	// array = append(array, "0", "0", "0")
+	// copy(array[9+3:], array[9:]) //delay for 2 index
+	// array[9] = "X-WR-TIMEZONE:Europe/Paris"
+	// array[10] = "X-PUBLISHED-TTL:PT12H"
+	// array[11] = "TZID:Europe/Paris"
 
 	write(strings.Join(array, "\r\n"), path)
 }
